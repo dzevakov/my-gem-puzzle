@@ -1,9 +1,11 @@
 export class Tile {
-  constructor(caption) {
+  constructor(caption, i, j) {
     this.caption = caption;
+    this.X = i;
+    this.Y = j;
   }
 
-  render(index) {
+  render() {
     if(index > 0) {
 
     }
