@@ -1,9 +1,12 @@
 export class Tile {
-  constructor(caption) {
+  constructor(caption, i, j) {
     this.caption = caption;
+    this.X = j; //координаты по оси х
+    this.Y = i; // по y
   }
 
-  render(index) {
+  //В зависимости от координат и установленых в конструкторе отрисовываем в правльном месте
+  render() {
     if(index > 0) {
 
     }
