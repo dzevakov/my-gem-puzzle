@@ -1,7 +1,7 @@
-import { Tile } from "./tile";
+import {Tile} from "./tile.js";
 
 export class Board {
-  constructor(boardSize) {
+  constructor(boardSize = 4) {
     this.boardSize = boardSize;
   }
 
@@ -15,7 +15,7 @@ export class Board {
       i--;
       j = Math.floor(Math.random() * (i + 1));
       result.push(nums[j]);
-      nums.splice(j,1);
+      nums.splice(j, 1);
     }
     return result;
   }
@@ -33,12 +33,13 @@ export class Board {
         boardGrid[i][j] = new Tile(tilesCaptions.shift(), i, j);
       }
     }
+    return boardGrid;
   }
 
-  renderBoard(boardGrid) {
+  renderBoard(boardGrid, canvasContext) {
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
-        boardGrid[i][j].render();
+        boardGrid[i][j].render(canvasContext);
       }
     }
   }

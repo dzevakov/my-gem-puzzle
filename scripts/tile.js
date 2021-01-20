@@ -5,9 +5,16 @@ export class Tile {
     this.Y = j;
   }
 
-  render() {
-    if(index > 0) {
+  render(canvasContext) {
+    if(this.caption === 0) {
 
+    } else {
+      canvasContext.strokeStyle = 'black';
+      canvasContext.fillStyle = 'rgb(113,161,255)';
+      canvasContext.fillRect((this.X * 100 + 5), (this.Y * 100 + 5), 90, 90);
+      canvasContext.strokeRect((this.X * 100 + 5), (this.Y * 100 + 5), 90, 90);
+      canvasContext.fillStyle = 'black';
+      canvasContext.fillText(this.caption, (this.X * 100 + 50), (this.Y * 100 + 50));
     }
   }
 }
