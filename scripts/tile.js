@@ -7,7 +7,7 @@ export class Tile {
 
   render(canvasContext) {
     if(this.caption === 0) {
-
+      canvasContext.clearRect((this.X * 100), (this.Y * 100), 100, 100);
     } else {
       canvasContext.strokeStyle = 'black';
       canvasContext.fillStyle = 'rgb(113,161,255)';
