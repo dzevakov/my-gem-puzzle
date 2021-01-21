@@ -27,6 +27,12 @@ timerBlock.append(' : ');
 const timeSeconds = document.createElement('span');
 timeSeconds.className = 'time-seconds';
 timerBlock.append(timeSeconds);
+
+const pause = document.createElement('input');
+pause.className = 'pause';
+pause.type = 'button';
+pause.value = 'Pause';
+statusBar.append(pause);
 //status bar end
 
 //game feild start
@@ -46,12 +52,29 @@ const gameMenu = document.createElement('div');
 gameMenu.className = 'gameMenu';
 container.append(gameMenu);
 
-const startButton = document.createElement('input');
-startButton.className = 'start-button';
-startButton.type = 'button';
-startButton.value = 'New game';
-gameMenu.append(startButton);
+const start = document.createElement('input');
+start.className = 'start menu-button';
+start.type = 'button';
+start.value = 'New game';
+gameMenu.append(start);
 
+const savedGame = document.createElement('input');
+savedGame.className = 'saved-game menu-button';
+savedGame.type = 'button';
+savedGame.value = 'Saved game';
+gameMenu.append(savedGame);
+
+const scores = document.createElement('input');
+scores.className = 'scores menu-button';
+scores.type = 'button';
+scores.value = 'Scores';
+gameMenu.append(scores);
+
+const settings = document.createElement('input');
+settings.className = 'settings menu-button';
+settings.type = 'button';
+settings.value = 'Settings';
+gameMenu.append(settings);
 //game menu end
 
 const ctx = canvasElement.getContext('2d');
@@ -62,7 +85,6 @@ ctx.textBaseline = 'middle';
 const gameBoard = new Board();
 const boardGrid = gameBoard.init();
 gameBoard.renderBoard(boardGrid, ctx);
-// setTimer();
 
 // move tile on click start
 canvasElement.addEventListener('click', e => {
@@ -94,7 +116,12 @@ canvasElement.addEventListener('click', e => {
 // move tile on click end
 
 //new game start
-startButton.addEventListener('click', e => {
+start.addEventListener('click', e => {
   gameMenu.style.display = 'none';
+  setTimer();
 });
 //new game end
+
+pause.addEventListener('click', e => {
+  gameMenu.style.display = 'flex';
+});
