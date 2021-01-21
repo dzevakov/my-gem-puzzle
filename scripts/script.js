@@ -4,6 +4,7 @@ import {setTimer} from "./timer.js";
 
 const body = document.querySelector('body');
 
+// status bar start
 const statusBar = document.createElement('section');
 statusBar.className = 'status-bar';
 body.append(statusBar);
@@ -26,13 +27,32 @@ timerBlock.append(' : ');
 const timeSeconds = document.createElement('span');
 timeSeconds.className = 'time-seconds';
 timerBlock.append(timeSeconds);
+//status bar end
 
+//game feild start
+const container = document.createElement('div');
+container.className = 'container';
+statusBar.after(container);
 
 const canvasElement = document.createElement('canvas');
 canvasElement.className = 'game-field';
 canvasElement.width = '400';
 canvasElement.height = '400';
-statusBar.after(canvasElement);
+container.append(canvasElement);
+//game feild end
+
+//game menu start
+const gameMenu = document.createElement('div');
+gameMenu.className = 'gameMenu';
+container.append(gameMenu);
+
+const startButton = document.createElement('input');
+startButton.className = 'start-button';
+startButton.type = 'button';
+startButton.value = 'New game';
+gameMenu.append(startButton);
+
+//game menu end
 
 const ctx = canvasElement.getContext('2d');
 ctx.font = '48px sanserif';
@@ -72,3 +92,9 @@ canvasElement.addEventListener('click', e => {
   }
 });
 // move tile on click end
+
+//new game start
+startButton.addEventListener('click', e => {
+  gameMenu.style.display = 'none';
+});
+//new game end
