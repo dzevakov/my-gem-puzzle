@@ -1,8 +1,8 @@
 export class Tile {
   constructor(caption, i, j) {
     this.caption = caption;
-    this.X = i;
-    this.Y = j;
+    this.X = j;
+    this.Y = i;
   }
 
   render(canvasContext) {

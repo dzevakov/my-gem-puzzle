@@ -1,95 +1,31 @@
 import {Board} from "./board.js";
 import {Tile} from "./tile.js";
-import {setTimer} from "./timer.js";
-
-const body = document.querySelector('body');
-
-// status bar start
-const statusBar = document.createElement('section');
-statusBar.className = 'status-bar';
-body.append(statusBar);
-
-const timer = document.createElement('div');
-timer.className = 'timer';
-statusBar.append(timer);
-
-const timerBlock = document.createElement('div');
-timerBlock.className = 'timer-block';
-timerBlock.innerText = 'Time ';
-timer.append(timerBlock);
-
-const timeMinutes = document.createElement('span');
-timeMinutes.className = 'time-minutes';
-timerBlock.append(timeMinutes);
-
-timerBlock.append(' : ');
-
-const timeSeconds = document.createElement('span');
-timeSeconds.className = 'time-seconds';
-timerBlock.append(timeSeconds);
-
-const pause = document.createElement('input');
-pause.className = 'pause';
-pause.type = 'button';
-pause.value = 'Pause';
-statusBar.append(pause);
-//status bar end
-
-//game feild start
-const container = document.createElement('div');
-container.className = 'container';
-statusBar.after(container);
-
-const canvasElement = document.createElement('canvas');
-canvasElement.className = 'game-field';
-canvasElement.width = '400';
-canvasElement.height = '400';
-container.append(canvasElement);
-//game feild end
-
-//game menu start
-const gameMenu = document.createElement('div');
-gameMenu.className = 'gameMenu';
-container.append(gameMenu);
-
-const start = document.createElement('input');
-start.className = 'start menu-button';
-start.type = 'button';
-start.value = 'New game';
-gameMenu.append(start);
-
-const savedGame = document.createElement('input');
-savedGame.className = 'saved-game menu-button';
-savedGame.type = 'button';
-savedGame.value = 'Saved game';
-gameMenu.append(savedGame);
-
-const scores = document.createElement('input');
-scores.className = 'scores menu-button';
-scores.type = 'button';
-scores.value = 'Scores';
-gameMenu.append(scores);
-
-const settings = document.createElement('input');
-settings.className = 'settings menu-button';
-settings.type = 'button';
-settings.value = 'Settings';
-gameMenu.append(settings);
-//game menu end
+import {Timer} from "./timer.js";
+import {canvasElement, start, gameMenu, pause} from "./init.js";
 
 const ctx = canvasElement.getContext('2d');
 ctx.font = '48px sanserif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 
-const gameBoard = new Board();
-const boardGrid = gameBoard.init();
-gameBoard.renderBoard(boardGrid, ctx);
+let gameBoard = new Board();
+let boardGrid = gameBoard.init();
+
+//new game start
+const timer = new Timer();
+start.addEventListener('click', e => {
+  gameBoard = new Board(); 
+  boardGrid = gameBoard.init();
+  gameBoard.renderBoard(boardGrid, ctx);
+  gameMenu.style.display = 'none';
+  // timer.setTimer();
+});
+//new game end
 
 // move tile on click start
 canvasElement.addEventListener('click', e => {
-  const i = Math.floor(e.offsetX / 100);
-  const j = Math.floor(e.offsetY / 100);
+  const j = Math.floor(e.offsetX / 100);
+  const i = Math.floor(e.offsetY / 100);
   
   if((i > 0) && (boardGrid[i - 1][j].caption === 0)) {
     boardGrid[i - 1][j].caption = boardGrid[i][j].caption;
@@ -112,16 +48,31 @@ canvasElement.addEventListener('click', e => {
     boardGrid[i][j].caption = 0;
     boardGrid[i][j].render(ctx);
   }
+
+  if(checkGame(boardGrid, gameBoard.boardSize) === true) {
+    alert('You Win!!!');
+  }
 });
 // move tile on click end
 
-//new game start
-start.addEventListener('click', e => {
-  gameMenu.style.display = 'none';
-  setTimer();
-});
-//new game end
-
 pause.addEventListener('click', e => {
   gameMenu.style.display = 'flex';
+  // timer.pause();
 });
+
+// end of game start
+function checkGame(boardGrid, boardSize) {
+  let checkNumbers = Array.from(Array(boardSize * boardSize).keys());
+  checkNumbers.push(checkNumbers.shift());
+  for(let i = 0; i < boardSize; i++) {
+    for(let j = 0; j < boardSize; j++) {
+      if(boardGrid[i][j].caption === checkNumbers.shift()) {
+        continue;
+      } else {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+// end of game start
