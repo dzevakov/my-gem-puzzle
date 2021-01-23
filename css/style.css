@@ -53,12 +53,15 @@ body {
   border: 1px solid black;
 } 
 
-.gameMenu {
-  position: absolute;
+.menu-display {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.game-menu {
+  position: absolute;
   top: 1px;
   left: 1px;
   width: 100%;
@@ -73,11 +76,15 @@ body {
   font-family: 'Shojumaru';
   font-style: normal;
   font-weight: 400;
-  font-size: 32px;
+  font-size: 28px;
   color: #ffba00;  
 }
 
 .menu-button:hover, .menu-button:focus {
   text-decoration: underline;
   color: #ff5e00; 
+}
+
+.moves-block {
+  width: 20%;
 }

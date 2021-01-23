@@ -1,7 +1,7 @@
 import {Board} from "./board.js";
-import {Tile} from "./tile.js";
+import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
-import {canvasElement, start, gameMenu, pause} from "./init.js";
+import {canvasElement, start, gameMenu, pauseMenu, resume, pause} from "./init.js";
 
 const ctx = canvasElement.getContext('2d');
 ctx.font = '48px sanserif';
@@ -13,11 +13,14 @@ let boardGrid = gameBoard.init();
 
 //new game start
 const timer = new Timer();
+const moveCounter = new MoveCounter();
 start.addEventListener('click', e => {
   gameBoard = new Board(); 
   boardGrid = gameBoard.init();
   gameBoard.renderBoard(boardGrid, ctx);
   gameMenu.style.display = 'none';
+  pauseMenu.style.display = 'none';
+  moveCounter.reset();
   // timer.setTimer();
 });
 //new game end
@@ -32,32 +35,43 @@ canvasElement.addEventListener('click', e => {
     boardGrid[i - 1][j].render(ctx);
     boardGrid[i][j].caption = 0;
     boardGrid[i][j].render(ctx);
+    moveCounter.countMoves();
   } else if((j > 0) && (boardGrid[i][j - 1].caption === 0)) {
     boardGrid[i][j - 1].caption = boardGrid[i][j].caption;
     boardGrid[i][j - 1].render(ctx);
     boardGrid[i][j].caption = 0;
     boardGrid[i][j].render(ctx);
+    moveCounter.countMoves();
   } else if((i < gameBoard.boardSize - 1) && (boardGrid[i + 1][j].caption === 0)) {
     boardGrid[i + 1][j].caption = boardGrid[i][j].caption;
     boardGrid[i + 1][j].render(ctx);
     boardGrid[i][j].caption = 0;
     boardGrid[i][j].render(ctx);
+    moveCounter.countMoves();
   } else if((j < gameBoard.boardSize - 1) && (boardGrid[i][j + 1].caption === 0)) {
     boardGrid[i][j + 1].caption = boardGrid[i][j].caption;
     boardGrid[i][j + 1].render(ctx);
     boardGrid[i][j].caption = 0;
     boardGrid[i][j].render(ctx);
+    moveCounter.countMoves();
   }
 
   if(checkGame(boardGrid, gameBoard.boardSize) === true) {
-    alert('You Win!!!');
+    alert('Ура! Вы решили головоломку за #:## и N ходов');
   }
 });
 // move tile on click end
 
 pause.addEventListener('click', e => {
   gameMenu.style.display = 'flex';
+  pauseMenu.style.display = 'flex';
   // timer.pause();
+});
+
+resume.addEventListener('click', e => {
+  gameMenu.style.display = 'none';
+  pauseMenu.style.display = 'none';
+  // timer.setTimer();
 });
 
 // end of game start

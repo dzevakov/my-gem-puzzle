@@ -24,6 +24,16 @@ const timeSeconds = document.createElement('span');
 timeSeconds.className = 'time-seconds';
 timerBlock.append(timeSeconds);
 
+const movesBlock = document.createElement('div');
+movesBlock.className = 'moves-block';
+movesBlock.innerText = 'Moves : ';
+statusBar.append(movesBlock);
+
+export const movesAmount = document.createElement('span');
+movesAmount.className = 'moves-amount';
+movesAmount.innerText = '0';
+movesBlock.append(movesAmount);
+
 export const pause = document.createElement('input');
 pause.className = 'pause';
 pause.type = 'button';
@@ -45,8 +55,27 @@ container.append(canvasElement);
 
 //game menu start
 export const gameMenu = document.createElement('div');
-gameMenu.className = 'gameMenu';
+gameMenu.className = 'game-menu menu-display';
 container.append(gameMenu);
+
+// pause menu start
+export const pauseMenu = document.createElement('div');
+pauseMenu.className = 'pause-menu menu-display';
+pauseMenu.style.display = 'none';
+gameMenu.append(pauseMenu);
+
+export const resume = document.createElement('input');
+resume.className = 'resume menu-button';
+resume.type = 'button';
+resume.value = 'Resume game';
+pauseMenu.append(resume);
+
+export const save = document.createElement('input');
+save.className = 'save menu-button';
+save.type = 'button';
+save.value = 'Save';
+pauseMenu.append(save);
+// pause menu end
 
 export const start = document.createElement('input');
 start.className = 'start menu-button';
@@ -54,11 +83,11 @@ start.type = 'button';
 start.value = 'New game';
 gameMenu.append(start);
 
-const savedGame = document.createElement('input');
-savedGame.className = 'saved-game menu-button';
-savedGame.type = 'button';
-savedGame.value = 'Saved game';
-gameMenu.append(savedGame);
+const loadGame = document.createElement('input');
+loadGame.className = 'load-game menu-button';
+loadGame.type = 'button';
+loadGame.value = 'Load game';
+gameMenu.append(loadGame);
 
 const scores = document.createElement('input');
 scores.className = 'scores menu-button';
