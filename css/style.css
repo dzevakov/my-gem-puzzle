@@ -85,6 +85,6 @@ body {
   color: #ff5e00; 
 }
 
-.moves-block {
-  width: 20%;
+.moves-block, .timer {
+  width: 25%;
 }

@@ -1,7 +1,8 @@
 import {Board} from "./board.js";
 import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
-import {canvasElement, start, gameMenu, pauseMenu, resume, pause} from "./init.js";
+import {canvasElement, start, gameMenu, pauseMenu, resume, pause, movesAmount} from "./init.js";
+import {State} from "./state.js";
 
 const ctx = canvasElement.getContext('2d');
 ctx.font = '48px sanserif';
@@ -11,9 +12,13 @@ ctx.textBaseline = 'middle';
 let gameBoard = new Board();
 let boardGrid = gameBoard.init();
 
-//new game start
-const timer = new Timer();
+//state init
+const state = new State();
+state.timer = new Timer();
+const timer = state.timer;
 const moveCounter = new MoveCounter();
+
+//new game start
 start.addEventListener('click', e => {
   gameBoard = new Board(); 
   boardGrid = gameBoard.init();
@@ -21,7 +26,8 @@ start.addEventListener('click', e => {
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
   moveCounter.reset();
-  // timer.setTimer();
+  timer.reset();
+  timer.setTimer();
 });
 //new game end
 
@@ -57,7 +63,7 @@ canvasElement.addEventListener('click', e => {
   }
 
   if(checkGame(boardGrid, gameBoard.boardSize) === true) {
-    alert('Ура! Вы решили головоломку за #:## и N ходов');
+    // alert(`Ура! Вы решили головоломку за #:## и ${movesAmount.innerHTML} ходов`);
   }
 });
 // move tile on click end
@@ -65,13 +71,13 @@ canvasElement.addEventListener('click', e => {
 pause.addEventListener('click', e => {
   gameMenu.style.display = 'flex';
   pauseMenu.style.display = 'flex';
-  // timer.pause();
+  timer.pause();
 });
 
 resume.addEventListener('click', e => {
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
-  // timer.setTimer();
+  timer.setTimer();
 });
 
 // end of game start

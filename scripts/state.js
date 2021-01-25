@@ -1,9 +1,11 @@
 export class State {
-  constructor () {
-    this.score =[];
-    this.tilesArragement = [];
-    this.boardSize = board.size;
-  }
+  // constructor(score, boardGrid, boardSize, timer, move) {
+  //   this.score =[];
+  //   this.boardGrid = boardGrid;
+  //   this.boardSize = boardSize;
+  //   this.timer = timer;
+  //   this.move = move;
+  // }
 
   save() {
     localStorage.setItem("state", JSON.stringify(this.state));

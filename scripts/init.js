@@ -16,12 +16,14 @@ timer.append(timerBlock);
 
 const timeMinutes = document.createElement('span');
 timeMinutes.className = 'time-minutes';
+timeMinutes.innerHTML = '00';
 timerBlock.append(timeMinutes);
 
 timerBlock.append(' : ');
 
 const timeSeconds = document.createElement('span');
 timeSeconds.className = 'time-seconds';
+timeSeconds.innerHTML = '00';
 timerBlock.append(timeSeconds);
 
 const movesBlock = document.createElement('div');
