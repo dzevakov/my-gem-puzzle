@@ -20,11 +20,10 @@ export class Timer {
   }
 
   setTimer() {
-    this.timeInterval = setInterval(this.timerUpdate, 1000);
+    this.timeInterval = setInterval(() => this.timerUpdate(), 1000);
   }
 
-  stop() {
-    clearInterval(this.timeInterval);
+  reset() {
     this.sec = 0;
   }
 
