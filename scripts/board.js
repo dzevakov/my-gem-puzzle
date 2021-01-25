@@ -3,6 +3,7 @@ import {Tile} from "./tile.js";
 export class Board {
   constructor(boardSize = 4) {
     this.boardSize = boardSize;
+    this.boardGrid = [];
   }
 
   randomCaption(boardSize) {
@@ -21,25 +22,22 @@ export class Board {
   }
   
   init(boardSize = 4) {
-    const boardGrid = [];
-
     for(let i = 0; i < boardSize; i++) {
-      boardGrid[i] = new Array(boardSize);
+      this.boardGrid[i] = new Array(boardSize);
     }
     
     const tilesCaptions = this.randomCaption(boardSize);
     for(let i = 0; i < boardSize; i ++) {
       for(let j = 0; j < boardSize; j ++) {
-        boardGrid[i][j] = new Tile(tilesCaptions.shift(), i, j);
+        this.boardGrid[i][j] = new Tile(tilesCaptions.shift(), i, j);
       }
     }
-    return boardGrid;
   }
 
-  renderBoard(boardGrid, canvasContext) {
+  renderBoard(canvasContext) {
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
-        boardGrid[i][j].render(canvasContext);
+        this.boardGrid[i][j].render(canvasContext);
       }
     }
   }

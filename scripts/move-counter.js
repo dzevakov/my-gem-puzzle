@@ -1,5 +1,5 @@
 export class MoveCounter {
-    constructor(movesAmount) {
+    constructor() {
         this.move = 0;
         this.movesAmount = document.querySelector('.moves-amount');
     }

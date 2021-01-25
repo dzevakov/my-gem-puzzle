@@ -1,7 +1,7 @@
 import {Board} from "./board.js";
 import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
-import {canvasElement, start, gameMenu, pauseMenu, resume, pause, movesAmount} from "./init.js";
+import {canvasElement, start, gameMenu, pauseMenu, resume, pause, save, loadGame} from "./init.js";
 import {State} from "./state.js";
 
 const ctx = canvasElement.getContext('2d');
@@ -9,60 +9,64 @@ ctx.font = '48px sanserif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 
-let gameBoard = new Board();
-let boardGrid = gameBoard.init();
-
 //state init
-const state = new State();
-state.timer = new Timer();
-const timer = state.timer;
-const moveCounter = new MoveCounter();
+let state = new State();
+function stateLoad() {
+  state.timer = new Timer();
+  state.moveCounter = new MoveCounter();
+  state.gameBoard = new Board();
+  state.gameBoard.init();
+  state.score = [];
+  if(localStorage.getItem('state')) {
+    state.load();
+  }
+}
+
+stateLoad();
 
 //new game start
 start.addEventListener('click', e => {
-  gameBoard = new Board(); 
-  boardGrid = gameBoard.init();
-  gameBoard.renderBoard(boardGrid, ctx);
+  state.gameBoard = new Board(); 
+  state.gameBoard.init();
+  state.gameBoard.renderBoard(ctx);
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
-  moveCounter.reset();
-  timer.reset();
-  timer.setTimer();
+  state.moveCounter.reset();
+  state.timer.reset();
+  state.timer.setTimer();
 });
 //new game end
 
 // move tile on click start
+function reRenderTile(i, j) {
+  state.gameBoard.boardGrid[i][j].caption = 0;
+  state.gameBoard.boardGrid[i][j].render(ctx);
+  state.moveCounter.countMoves();
+}
+
 canvasElement.addEventListener('click', e => {
   const j = Math.floor(e.offsetX / 100);
   const i = Math.floor(e.offsetY / 100);
   
-  if((i > 0) && (boardGrid[i - 1][j].caption === 0)) {
-    boardGrid[i - 1][j].caption = boardGrid[i][j].caption;
-    boardGrid[i - 1][j].render(ctx);
-    boardGrid[i][j].caption = 0;
-    boardGrid[i][j].render(ctx);
-    moveCounter.countMoves();
-  } else if((j > 0) && (boardGrid[i][j - 1].caption === 0)) {
-    boardGrid[i][j - 1].caption = boardGrid[i][j].caption;
-    boardGrid[i][j - 1].render(ctx);
-    boardGrid[i][j].caption = 0;
-    boardGrid[i][j].render(ctx);
-    moveCounter.countMoves();
-  } else if((i < gameBoard.boardSize - 1) && (boardGrid[i + 1][j].caption === 0)) {
-    boardGrid[i + 1][j].caption = boardGrid[i][j].caption;
-    boardGrid[i + 1][j].render(ctx);
-    boardGrid[i][j].caption = 0;
-    boardGrid[i][j].render(ctx);
-    moveCounter.countMoves();
-  } else if((j < gameBoard.boardSize - 1) && (boardGrid[i][j + 1].caption === 0)) {
-    boardGrid[i][j + 1].caption = boardGrid[i][j].caption;
-    boardGrid[i][j + 1].render(ctx);
-    boardGrid[i][j].caption = 0;
-    boardGrid[i][j].render(ctx);
-    moveCounter.countMoves();
+  if((i > 0) && (state.gameBoard.boardGrid[i - 1][j].caption === 0)) {
+    state.gameBoard.boardGrid[i - 1][j].caption = state.gameBoard.boardGrid[i][j].caption;
+    state.gameBoard.boardGrid[i - 1][j].render(ctx);
+    reRenderTile(i, j);
+  } else if((j > 0) && (state.gameBoard.boardGrid[i][j - 1].caption === 0)) {
+    state.gameBoard.boardGrid[i][j - 1].caption = state.gameBoard.boardGrid[i][j].caption;
+    state.gameBoard.boardGrid[i][j - 1].render(ctx);
+    reRenderTile(i, j);
+  } else if((i < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[i + 1][j].caption === 0)) {
+    state.gameBoard.boardGrid[i + 1][j].caption = state.gameBoard.boardGrid[i][j].caption;
+    state.gameBoard.boardGrid[i + 1][j].render(ctx);
+    reRenderTile(i, j);
+  } else if((j < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[i][j + 1].caption === 0)) {
+    state.gameBoard.boardGrid[i][j + 1].caption = state.gameBoard.boardGrid[i][j].caption;
+    state.gameBoard.boardGrid[i][j + 1].render(ctx);
+    reRenderTile(i, j);
   }
 
-  if(checkGame(boardGrid, gameBoard.boardSize) === true) {
+  if(checkGame(state.gameBoard.boardGrid, state.gameBoard.boardSize) === true) {
     // alert(`Ура! Вы решили головоломку за #:## и ${movesAmount.innerHTML} ходов`);
   }
 });
@@ -71,13 +75,27 @@ canvasElement.addEventListener('click', e => {
 pause.addEventListener('click', e => {
   gameMenu.style.display = 'flex';
   pauseMenu.style.display = 'flex';
-  timer.pause();
+  state.timer.pause();
 });
 
 resume.addEventListener('click', e => {
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
-  timer.setTimer();
+  state.timer.setTimer();
+});
+
+save.addEventListener('click', e => {
+  state.save(state);
+});
+
+loadGame.addEventListener('click', e => {
+  if(localStorage.getItem('state')) {
+    state.load();
+    state.gameBoard.renderBoard(ctx);
+    gameMenu.style.display = 'none';
+    pauseMenu.style.display = 'none';
+    state.timer.setTimer();
+  }
 });
 
 // end of game start

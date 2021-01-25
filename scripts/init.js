@@ -85,7 +85,7 @@ start.type = 'button';
 start.value = 'New game';
 gameMenu.append(start);
 
-const loadGame = document.createElement('input');
+export const loadGame = document.createElement('input');
 loadGame.className = 'load-game menu-button';
 loadGame.type = 'button';
 loadGame.value = 'Load game';
