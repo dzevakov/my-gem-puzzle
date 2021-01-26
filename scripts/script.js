@@ -4,13 +4,14 @@ import {Timer} from "./timer.js";
 import {canvasElement, start, gameMenu, pauseMenu, resume, pause, save, loadGame} from "./init.js";
 import {State} from "./state.js";
 
-const ctx = canvasElement.getContext('2d');
+export const ctx = canvasElement.getContext('2d');
+ctx.strokeStyle = 'black';
 ctx.font = '48px sanserif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 
 //state init
-let state = new State();
+export let state = new State();
 function stateLoad() {
   state.timer = new Timer();
   state.moveCounter = new MoveCounter();
@@ -36,41 +37,6 @@ start.addEventListener('click', e => {
   state.timer.setTimer();
 });
 //new game end
-
-// move tile on click start
-function reRenderTile(i, j) {
-  state.gameBoard.boardGrid[i][j].caption = 0;
-  state.gameBoard.boardGrid[i][j].render(ctx);
-  state.moveCounter.countMoves();
-}
-
-canvasElement.addEventListener('click', e => {
-  const j = Math.floor(e.offsetX / 100);
-  const i = Math.floor(e.offsetY / 100);
-  
-  if((i > 0) && (state.gameBoard.boardGrid[i - 1][j].caption === 0)) {
-    state.gameBoard.boardGrid[i - 1][j].caption = state.gameBoard.boardGrid[i][j].caption;
-    state.gameBoard.boardGrid[i - 1][j].render(ctx);
-    reRenderTile(i, j);
-  } else if((j > 0) && (state.gameBoard.boardGrid[i][j - 1].caption === 0)) {
-    state.gameBoard.boardGrid[i][j - 1].caption = state.gameBoard.boardGrid[i][j].caption;
-    state.gameBoard.boardGrid[i][j - 1].render(ctx);
-    reRenderTile(i, j);
-  } else if((i < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[i + 1][j].caption === 0)) {
-    state.gameBoard.boardGrid[i + 1][j].caption = state.gameBoard.boardGrid[i][j].caption;
-    state.gameBoard.boardGrid[i + 1][j].render(ctx);
-    reRenderTile(i, j);
-  } else if((j < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[i][j + 1].caption === 0)) {
-    state.gameBoard.boardGrid[i][j + 1].caption = state.gameBoard.boardGrid[i][j].caption;
-    state.gameBoard.boardGrid[i][j + 1].render(ctx);
-    reRenderTile(i, j);
-  }
-
-  if(checkGame(state.gameBoard.boardGrid, state.gameBoard.boardSize) === true) {
-    // alert(`Ура! Вы решили головоломку за #:## и ${movesAmount.innerHTML} ходов`);
-  }
-});
-// move tile on click end
 
 pause.addEventListener('click', e => {
   gameMenu.style.display = 'flex';

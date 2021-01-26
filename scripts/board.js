@@ -1,4 +1,5 @@
 import {Tile} from "./tile.js";
+import {canvasElement} from "./init.js";
 
 export class Board {
   constructor(boardSize = 4) {
@@ -35,6 +36,7 @@ export class Board {
   }
 
   renderBoard(canvasContext) {
+    canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
         this.boardGrid[i][j].render(canvasContext);
