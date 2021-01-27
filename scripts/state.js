@@ -1,5 +1,3 @@
-import {Tile} from "./tile.js";
-
 export class State {
   save(item) {
     localStorage.setItem("state", JSON.stringify(item));

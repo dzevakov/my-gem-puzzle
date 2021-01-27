@@ -2,7 +2,7 @@ const body = document.querySelector('body');
 
 // status bar start
 const statusBar = document.createElement('section');
-statusBar.className = 'status-bar';
+statusBar.className = 'status-bar status-item ';
 body.append(statusBar);
 
 const timer = document.createElement('div');
@@ -37,7 +37,7 @@ movesAmount.innerText = '0';
 movesBlock.append(movesAmount);
 
 export const pause = document.createElement('input');
-pause.className = 'pause';
+pause.className = 'pause status-item ';
 pause.type = 'button';
 pause.value = 'Pause';
 statusBar.append(pause);

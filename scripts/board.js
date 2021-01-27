@@ -1,14 +1,13 @@
 import {Tile} from "./tile.js";
-import {canvasElement} from "./init.js";
 
 export class Board {
-  constructor(boardSize = 4) {
+  constructor(boardSize = 5) {
     this.boardSize = boardSize;
     this.boardGrid = [];
   }
 
-  randomCaption(boardSize) {
-    let nums = Array.from(Array(boardSize * boardSize).keys());
+  randomCaption() {
+    let nums = Array.from(Array(this.boardSize * this.boardSize).keys());
     const result = [];
     let i = nums.length;
     let j = 0;
@@ -22,24 +21,24 @@ export class Board {
     return result;
   }
   
-  init(boardSize = 4) {
-    for(let i = 0; i < boardSize; i++) {
-      this.boardGrid[i] = new Array(boardSize);
+  init() {
+    for(let i = 0; i < this.boardSize; i++) {
+      this.boardGrid[i] = new Array(this.boardSize);
     }
     
-    const tilesCaptions = this.randomCaption(boardSize);
-    for(let i = 0; i < boardSize; i ++) {
-      for(let j = 0; j < boardSize; j ++) {
+    const tilesCaptions = this.randomCaption(this.boardSize);
+    for(let i = 0; i < this.boardSize; i ++) {
+      for(let j = 0; j < this.boardSize; j ++) {
         this.boardGrid[i][j] = new Tile(tilesCaptions.shift(), i, j);
       }
     }
   }
 
-  renderBoard(canvasContext) {
-    canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  renderBoard(canvasContext, tileRectungleWidth, canvasWidth) {
+    canvasContext.clearRect(0, 0, canvasWidth, canvasWidth);
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
-        this.boardGrid[i][j].render(canvasContext);
+        this.boardGrid[i][j].render(canvasContext, tileRectungleWidth);
       }
     }
   }

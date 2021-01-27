@@ -6,7 +6,7 @@ import {State} from "./state.js";
 
 export const ctx = canvasElement.getContext('2d');
 ctx.strokeStyle = 'black';
-ctx.font = '48px sanserif';
+ctx.font = '36px sanserif';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 
@@ -25,11 +25,13 @@ function stateLoad() {
 
 stateLoad();
 
+export let tileRectungleWidth = canvasElement.width / state.gameBoard.boardSize;
+
 //new game start
 start.addEventListener('click', e => {
   state.gameBoard = new Board(); 
   state.gameBoard.init();
-  state.gameBoard.renderBoard(ctx);
+  state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
   state.moveCounter.reset();
@@ -57,26 +59,9 @@ save.addEventListener('click', e => {
 loadGame.addEventListener('click', e => {
   if(localStorage.getItem('state')) {
     state.load();
-    state.gameBoard.renderBoard(ctx);
+    state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
     gameMenu.style.display = 'none';
     pauseMenu.style.display = 'none';
     state.timer.setTimer();
   }
 });
-
-// end of game start
-function checkGame(boardGrid, boardSize) {
-  let checkNumbers = Array.from(Array(boardSize * boardSize).keys());
-  checkNumbers.push(checkNumbers.shift());
-  for(let i = 0; i < boardSize; i++) {
-    for(let j = 0; j < boardSize; j++) {
-      if(boardGrid[i][j].caption === checkNumbers.shift()) {
-        continue;
-      } else {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-// end of game start
