@@ -98,6 +98,18 @@ body {
   color: #ff5e00; 
 }
 
+.main-menu-container{
+  display: flex;
+}
+
+.settings-boardSize {
+  display: none;
+}
+
+.back {
+  display: none;
+}
+
 .moves-block, .timer {
   width: 33.3%;
 }

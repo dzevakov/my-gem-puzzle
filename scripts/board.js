@@ -1,7 +1,7 @@
 import {Tile} from "./tile.js";
 
 export class Board {
-  constructor(boardSize = 5) {
+  constructor(boardSize = 3) {
     this.boardSize = boardSize;
     this.boardGrid = [];
   }

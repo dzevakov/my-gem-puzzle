@@ -79,27 +79,79 @@ save.value = 'Save';
 pauseMenu.append(save);
 // pause menu end
 
+// main menu
+export const mainMenuContainer = document.createElement('div');
+mainMenuContainer.className = 'main-menu-container menu-display';
+gameMenu.append(mainMenuContainer);
+
 export const start = document.createElement('input');
 start.className = 'start menu-button';
 start.type = 'button';
 start.value = 'New game';
-gameMenu.append(start);
+mainMenuContainer.append(start);
 
 export const loadGame = document.createElement('input');
 loadGame.className = 'load-game menu-button';
 loadGame.type = 'button';
 loadGame.value = 'Load game';
-gameMenu.append(loadGame);
+mainMenuContainer.append(loadGame);
 
-const scores = document.createElement('input');
+export const scores = document.createElement('input');
 scores.className = 'scores menu-button';
 scores.type = 'button';
 scores.value = 'Scores';
-gameMenu.append(scores);
+mainMenuContainer.append(scores);
 
-const settings = document.createElement('input');
+export const settings = document.createElement('input');
 settings.className = 'settings menu-button';
 settings.type = 'button';
 settings.value = 'Settings';
-gameMenu.append(settings);
+mainMenuContainer.append(settings);
+
+// setting of BoardSize
+export const settingsContainer = document.createElement('div');
+settingsContainer.className = 'settings-boardSize menu-display';
+gameMenu.append(settingsContainer);
+
+export const boardSize3 = document.createElement('input');
+boardSize3.className = 'boardSize-settings menu-button';
+boardSize3.type = 'button';
+boardSize3.value = '3x3';
+settingsContainer.append(boardSize3);
+
+export const boardSize4 = document.createElement('input');
+boardSize4.className = 'boardSize-settings menu-button';
+boardSize4.type = 'button';
+boardSize4.value = '4x4';
+settingsContainer.append(boardSize4);
+
+export const boardSize5 = document.createElement('input');
+boardSize5.className = 'boardSize-settings menu-button';
+boardSize5.type = 'button';
+boardSize5.value = '5x5';
+settingsContainer.append(boardSize5);
+
+export const boardSize6 = document.createElement('input');
+boardSize6.className = 'boardSize-settings menu-button';
+boardSize6.type = 'button';
+boardSize6.value = '6x6';
+settingsContainer.append(boardSize6);
+
+export const boardSize7 = document.createElement('input');
+boardSize7.className = 'boardSize-settings menu-button';
+boardSize7.type = 'button';
+boardSize7.value = '7x7';
+settingsContainer.append(boardSize7);
+
+export const boardSize8 = document.createElement('input');
+boardSize8.className = 'boardSize-settings menu-button';
+boardSize8.type = 'button';
+boardSize8.value = '8x8';
+settingsContainer.append(boardSize8);
+
+export const back = document.createElement('input');
+back.className = 'back menu-button';
+back.type = 'button';
+back.value = 'Back';
+gameMenu.append(back);
 //game menu end

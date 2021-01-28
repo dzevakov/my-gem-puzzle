@@ -1,3 +1,5 @@
+import {Tile} from "./tile.js";
+
 export class State {
   save(item) {
     localStorage.setItem("state", JSON.stringify(item));
@@ -7,6 +9,16 @@ export class State {
     const loadItem = JSON.parse(localStorage.getItem("state"));
    
     this.gameBoard.boardSize = loadItem.gameBoard.boardSize;
+
+    this.gameBoard.boardGrid = [];
+    for(let i = 0; i < this.gameBoard.boardSize; i++) {
+      this.gameBoard.boardGrid[i] = new Array(this.gameBoard.boardSize);
+    }
+    for(let i = 0; i < this.gameBoard.boardSize; i ++) {
+      for(let j = 0; j < this.gameBoard.boardSize; j ++) {
+        this.gameBoard.boardGrid[i][j] = new Tile(null, i, j);
+      }
+    }
     
     for(let i = 0; i < this.gameBoard.boardSize; i ++) {
       for(let j = 0; j < this.gameBoard.boardSize; j ++) {

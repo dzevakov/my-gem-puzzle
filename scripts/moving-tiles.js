@@ -53,7 +53,7 @@ canvasElement.addEventListener('mousedown', e => {
 });
 
 canvasElement.addEventListener('mousemove', e => {
-  if(Math.abs(mouseDownXY.X - e.offsetX) > 5 || Math.abs(mouseDownXY.Y - e.offsetY) > 5) {
+  if(Math.abs(mouseDownXY.X - e.offsetX) > 10 || Math.abs(mouseDownXY.Y - e.offsetY) > 10) {
     if(isDeleting === true) {
       state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = 0;
       isDeleting = false;
@@ -111,6 +111,11 @@ canvasElement.addEventListener('mouseup', e => {
   isDeleting = false;
   targetTile.clear();
   mouseDownXY.clear();
+
+  if(checkGame(state.gameBoard.boardGrid, state.gameBoard.boardSize)) {
+    state.timer.pause();
+    alert(`You WIN with ${Math.floor(state.timer.sec / 60)}:${Math.floor(state.timer.sec % 60)} time & ${state.moveCounter.move} moves.`);
+  }
 });
   
   // end of game start
