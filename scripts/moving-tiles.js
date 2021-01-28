@@ -2,24 +2,30 @@ import {ctx, state, tileRectungleWidth} from "./script.js";
 import {canvasElement} from "./init.js";
 
 let targetTile = {
-  X : null,
-  Y : null,
+  X : undefined,
+  Y : undefined,
   clear : function() {
-    this.X = null;
-    this.Y = null;
+    this.X = undefined;
+    this.Y = undefined;
   }
 };
-let X;
-let Y;
+let mouseDownXY = {
+  X : undefined,
+  Y : undefined,
+  clear : function() {
+    this.X = undefined;
+    this.Y = undefined;
+  }
+};
 let isMoving = false;
 let wasMoving = false;
 let isDeleting = false;
 let xCorrect = 0;
 let yCorrect = 0;
 let draggable = {
-  caption : null,
-  X : null,
-  Y : null
+  caption : undefined,
+  X : undefined,
+  Y : undefined
 };
 
 function onMoveDraw(rectX, rectY) {
@@ -35,49 +41,51 @@ function onMoveDraw(rectX, rectY) {
 }
 
 canvasElement.addEventListener('mousedown', e => {
-  X = Math.floor(e.offsetX / tileRectungleWidth);
-  Y = Math.floor(e.offsetY / tileRectungleWidth);
-  xCorrect = e.offsetX - (state.gameBoard.boardGrid[Y][X].X * tileRectungleWidth);
-  yCorrect = e.offsetY - (state.gameBoard.boardGrid[Y][X].Y * tileRectungleWidth);
+  draggable.X = Math.floor(e.offsetX / tileRectungleWidth);
+  draggable.Y = Math.floor(e.offsetY / tileRectungleWidth);
+  mouseDownXY.X = e.offsetX;
+  mouseDownXY.Y = e.offsetY;
+  xCorrect = e.offsetX - (state.gameBoard.boardGrid[draggable.Y][draggable.X].X * tileRectungleWidth);
+  yCorrect = e.offsetY - (state.gameBoard.boardGrid[draggable.Y][draggable.X].Y * tileRectungleWidth);
   isMoving = true;
   isDeleting = true;
-  draggable.caption = state.gameBoard.boardGrid[Y][X].caption;
-  draggable.X = X;
-  draggable.Y = Y;
+  draggable.caption = state.gameBoard.boardGrid[draggable.Y][draggable.X].caption;
 });
 
 canvasElement.addEventListener('mousemove', e => {
-  if(isDeleting === true) {
-    state.gameBoard.boardGrid[Y][X].caption = 0;
-    isDeleting = false;
-  }
-  if(isMoving === true) {
-    onMoveDraw(e.offsetX - xCorrect, e.offsetY - yCorrect);
-    wasMoving = true;
+  if(Math.abs(mouseDownXY.X - e.offsetX) > 5 || Math.abs(mouseDownXY.Y - e.offsetY) > 5) {
+    if(isDeleting === true) {
+      state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = 0;
+      isDeleting = false;
+    }
+    if(isMoving === true) {
+      onMoveDraw(e.offsetX - xCorrect, e.offsetY - yCorrect);
+      wasMoving = true;
+    }
   }
 });
 
 function reRenderTile(i, j) {
-  state.gameBoard.boardGrid[j][i].caption = state.gameBoard.boardGrid[Y][X].caption;
+  state.gameBoard.boardGrid[j][i].caption = state.gameBoard.boardGrid[draggable.Y][draggable.X].caption;
   state.gameBoard.boardGrid[j][i].render(ctx, tileRectungleWidth);
-  state.gameBoard.boardGrid[Y][X].caption = 0;
-  state.gameBoard.boardGrid[Y][X].render(ctx, tileRectungleWidth);
+  state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = 0;
+  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileRectungleWidth);
   state.moveCounter.countMoves();
 }
 
 canvasElement.addEventListener('mouseup', e => {
-  if((Y > 0) && (state.gameBoard.boardGrid[Y - 1][X].caption === 0)) {
-    targetTile.X = X;
-    targetTile.Y = Y - 1;
-  } else if((X > 0) && (state.gameBoard.boardGrid[Y][X - 1].caption === 0)) {
-    targetTile.X = X - 1;
-    targetTile.Y = Y;
-  } else if((Y < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[Y + 1][X].caption === 0)) {
-    targetTile.X = X;
-    targetTile.Y = Y + 1;
-  } else if((X < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[Y][X + 1].caption === 0)) {
-    targetTile.X = X + 1;
-    targetTile.Y = Y;
+  if((draggable.Y > 0) && (state.gameBoard.boardGrid[draggable.Y - 1][draggable.X].caption === 0)) {
+    targetTile.X = draggable.X;
+    targetTile.Y = draggable.Y - 1;
+  } else if((draggable.X > 0) && (state.gameBoard.boardGrid[draggable.Y][draggable.X - 1].caption === 0)) {
+    targetTile.X = draggable.X - 1;
+    targetTile.Y = draggable.Y;
+  } else if((draggable.Y < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[draggable.Y + 1][draggable.X].caption === 0)) {
+    targetTile.X = draggable.X;
+    targetTile.Y = draggable.Y + 1;
+  } else if((draggable.X < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[draggable.Y][draggable.X + 1].caption === 0)) {
+    targetTile.X = draggable.X + 1;
+    targetTile.Y = draggable.Y;
   }
 
   if(wasMoving) {
@@ -89,11 +97,11 @@ canvasElement.addEventListener('mouseup', e => {
       state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
       state.moveCounter.countMoves();
     } else {
-      state.gameBoard.boardGrid[Y][X].caption = draggable.caption;
+      state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = draggable.caption;
       state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
     }
   } else {
-    if(targetTile.X && targetTile.Y) {
+    if(targetTile.X !== undefined && targetTile.Y !== undefined) {
       reRenderTile(targetTile.X, targetTile.Y);
     }
   }
@@ -102,6 +110,7 @@ canvasElement.addEventListener('mouseup', e => {
   wasMoving = false;
   isDeleting = false;
   targetTile.clear();
+  mouseDownXY.clear();
 });
   
   // end of game start
