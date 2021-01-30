@@ -1,22 +1,34 @@
 import {Tile} from "./tile.js";
+import {TilePic} from "./tile-picture.js";
 
 export class Board {
-  constructor(boardSize = 3) {
+  constructor(boardSize = 4) {
     this.boardSize = boardSize;
     this.boardGrid = [];
   }
 
-  randomCaption() {
-    let nums = Array.from(Array(this.boardSize * this.boardSize).keys());
+  randomTiles(tileType) {
+    let tilesArray = [];
+    let captionNumber = 0;
+    for(let i = 0; i < this.boardSize; i++) {
+      for(let j = 0; j < this.boardSize; j++) {
+        if(tileType) {
+          // tilesArray.push(new TilePic(++captionNumber, j, i));
+        } else {
+          tilesArray.push(new Tile(captionNumber++, j, i));
+        }
+      }
+    }
+
     const result = [];
-    let i = nums.length;
-    let j = 0;
-  
-    while (i > 0) {
-      i--;
-      j = Math.floor(Math.random() * (i + 1));
-      result.push(nums[j]);
-      nums.splice(j, 1);
+    let k = tilesArray.length;
+    let l = 0;
+
+    while (k > 0) {
+      k--;
+      l = Math.floor(Math.random() * (k + 1));
+      result.push(tilesArray[l]);
+      tilesArray.splice(l, 1);
     }
     return result;
   }
@@ -26,19 +38,19 @@ export class Board {
       this.boardGrid[i] = new Array(this.boardSize);
     }
     
-    const tilesCaptions = this.randomCaption(this.boardSize);
+    const tiles = this.randomTiles();
     for(let i = 0; i < this.boardSize; i ++) {
       for(let j = 0; j < this.boardSize; j ++) {
-        this.boardGrid[i][j] = new Tile(tilesCaptions.shift(), i, j);
+          this.boardGrid[i][j] = tiles.shift();
       }
     }
   }
 
-  renderBoard(canvasContext, tileRectungleWidth, canvasWidth) {
+  renderBoard(canvasContext, tileWidth, canvasWidth) {
     canvasContext.clearRect(0, 0, canvasWidth, canvasWidth);
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
-        this.boardGrid[i][j].render(canvasContext, tileRectungleWidth);
+        this.boardGrid[i][j].render(canvasContext, tileWidth, i, j);
       }
     }
   }

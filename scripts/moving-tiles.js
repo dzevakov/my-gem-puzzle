@@ -1,4 +1,4 @@
-import {ctx, state, tileRectungleWidth} from "./script.js";
+import {ctx, state, tileWidth} from "./script.js";
 import {canvasElement} from "./init.js";
 
 let targetTile = {
@@ -29,24 +29,24 @@ let draggable = {
 };
 
 function onMoveDraw(rectX, rectY) {
-  state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
+  state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
   ctx.fillStyle = 'rgb(113,161,255)';
   ctx.fillRect((rectX + 5), (rectY + 5),
-    tileRectungleWidth - 10, tileRectungleWidth - 10);
+    tileWidth - 10, tileWidth - 10);
   ctx.strokeRect((rectX + 5), (rectY + 5),
-    tileRectungleWidth - 10, tileRectungleWidth - 10);
+    tileWidth - 10, tileWidth - 10);
   ctx.fillStyle = 'black';
-  ctx.fillText(draggable.caption, (rectX + (tileRectungleWidth / 2)),
-    (rectY + (tileRectungleWidth / 2)));
+  ctx.fillText(draggable.caption, (rectX + (tileWidth / 2)),
+    (rectY + (tileWidth / 2)));
 }
 
 canvasElement.addEventListener('mousedown', e => {
-  draggable.X = Math.floor(e.offsetX / tileRectungleWidth);
-  draggable.Y = Math.floor(e.offsetY / tileRectungleWidth);
+  draggable.X = Math.floor(e.offsetX / tileWidth);
+  draggable.Y = Math.floor(e.offsetY / tileWidth);
   mouseDownXY.X = e.offsetX;
   mouseDownXY.Y = e.offsetY;
-  xCorrect = e.offsetX - (state.gameBoard.boardGrid[draggable.Y][draggable.X].X * tileRectungleWidth);
-  yCorrect = e.offsetY - (state.gameBoard.boardGrid[draggable.Y][draggable.X].Y * tileRectungleWidth);
+  xCorrect = e.offsetX - (draggable.X * tileWidth);
+  yCorrect = e.offsetY - (draggable.Y * tileWidth);
   isMoving = true;
   isDeleting = true;
   draggable.caption = state.gameBoard.boardGrid[draggable.Y][draggable.X].caption;
@@ -66,10 +66,11 @@ canvasElement.addEventListener('mousemove', e => {
 });
 
 function reRenderTile(i, j) {
-  state.gameBoard.boardGrid[j][i].caption = state.gameBoard.boardGrid[draggable.Y][draggable.X].caption;
-  state.gameBoard.boardGrid[j][i].render(ctx, tileRectungleWidth);
-  state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = 0;
-  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileRectungleWidth);
+  const tempTile = state.gameBoard.boardGrid[j][i];
+  state.gameBoard.boardGrid[j][i] = state.gameBoard.boardGrid[draggable.Y][draggable.X];
+  state.gameBoard.boardGrid[j][i].render(ctx, tileWidth, j, i);
+  state.gameBoard.boardGrid[draggable.Y][draggable.X] = tempTile;
+  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileWidth, draggable.Y, draggable.X);
   state.moveCounter.countMoves();
 }
 
@@ -88,17 +89,19 @@ canvasElement.addEventListener('mouseup', e => {
     targetTile.Y = draggable.Y;
   }
 
+  const tempTile = state.gameBoard.boardGrid[draggable.Y][draggable.X];
+  tempTile.caption = draggable.caption;
   if(wasMoving) {
-    if(e.offsetX > (targetTile.X * tileRectungleWidth) &&
-      e.offsetX < ((targetTile.X + 1) * tileRectungleWidth) &&
-      e.offsetY > (targetTile.Y * tileRectungleWidth) &&
-      e.offsetY < ((targetTile.Y + 1) * tileRectungleWidth)) {
-      state.gameBoard.boardGrid[targetTile.Y][targetTile.X].caption = draggable.caption;
-      state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
+    if(e.offsetX > (targetTile.X * tileWidth) &&
+      e.offsetX < ((targetTile.X + 1) * tileWidth) &&
+      e.offsetY > (targetTile.Y * tileWidth) &&
+      e.offsetY < ((targetTile.Y + 1) * tileWidth)) {
+      state.gameBoard.boardGrid[draggable.Y][draggable.X] = state.gameBoard.boardGrid[targetTile.Y][targetTile.X];
+      state.gameBoard.boardGrid[targetTile.Y][targetTile.X] = tempTile;
+      state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
       state.moveCounter.countMoves();
     } else {
-      state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = draggable.caption;
-      state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
+      state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
     }
   } else {
     if(targetTile.X !== undefined && targetTile.Y !== undefined) {
@@ -134,5 +137,4 @@ function checkGame(boardGrid, boardSize) {
   return true;
 }
 // end of game start
- 
-  
+   
