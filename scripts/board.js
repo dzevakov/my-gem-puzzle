@@ -9,16 +9,18 @@ export class Board {
 
   randomTiles(tileType) {
     let tilesArray = [];
-    let captionNumber = 0;
+    let captionNumber = 1;
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
         if(tileType) {
-          // tilesArray.push(new TilePic(++captionNumber, j, i));
+          tilesArray.push(new TilePic(captionNumber++, j, i));
         } else {
           tilesArray.push(new Tile(captionNumber++, j, i));
         }
       }
     }
+
+    tilesArray[tilesArray.length - 1].caption = 0;
 
     const result = [];
     let k = tilesArray.length;
@@ -33,12 +35,12 @@ export class Board {
     return result;
   }
   
-  init() {
+  init(tileType) {
     for(let i = 0; i < this.boardSize; i++) {
       this.boardGrid[i] = new Array(this.boardSize);
     }
     
-    const tiles = this.randomTiles();
+    const tiles = this.randomTiles(tileType);
     for(let i = 0; i < this.boardSize; i ++) {
       for(let j = 0; j < this.boardSize; j ++) {
           this.boardGrid[i][j] = tiles.shift();
@@ -50,7 +52,7 @@ export class Board {
     canvasContext.clearRect(0, 0, canvasWidth, canvasWidth);
     for(let i = 0; i < this.boardSize; i++) {
       for(let j = 0; j < this.boardSize; j++) {
-        this.boardGrid[i][j].render(canvasContext, tileWidth, i, j);
+        this.boardGrid[i][j].render(canvasContext, tileWidth, j, i);
       }
     }
   }

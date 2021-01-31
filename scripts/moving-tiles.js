@@ -65,12 +65,12 @@ canvasElement.addEventListener('mousemove', e => {
   }
 });
 
-function reRenderTile(i, j) {
-  const tempTile = state.gameBoard.boardGrid[j][i];
-  state.gameBoard.boardGrid[j][i] = state.gameBoard.boardGrid[draggable.Y][draggable.X];
-  state.gameBoard.boardGrid[j][i].render(ctx, tileWidth, j, i);
+function reRenderTile(j, i) {
+  const tempTile = state.gameBoard.boardGrid[i][j];
+  state.gameBoard.boardGrid[i][j] = state.gameBoard.boardGrid[draggable.Y][draggable.X];
+  state.gameBoard.boardGrid[i][j].render(ctx, tileWidth, j, i);
   state.gameBoard.boardGrid[draggable.Y][draggable.X] = tempTile;
-  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileWidth, draggable.Y, draggable.X);
+  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileWidth, draggable.X, draggable.Y);
   state.moveCounter.countMoves();
 }
 
