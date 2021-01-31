@@ -149,6 +149,12 @@ boardSize8.type = 'button';
 boardSize8.value = '8x8';
 settingsContainer.append(boardSize8);
 
+export const pictureSettings = document.createElement('input');
+pictureSettings.className = 'boardSize-settings menu-button';
+pictureSettings.type = 'button';
+pictureSettings.value = 'Picture';
+settingsContainer.append(pictureSettings);
+
 export const back = document.createElement('input');
 back.className = 'back menu-button';
 back.type = 'button';

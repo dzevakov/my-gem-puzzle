@@ -16,7 +16,7 @@ export class State {
     }
     for(let i = 0; i < this.gameBoard.boardSize; i ++) {
       for(let j = 0; j < this.gameBoard.boardSize; j ++) {
-        this.gameBoard.boardGrid[i][j] = new Tile(null, i, j);
+        this.gameBoard.boardGrid[i][j] = new Tile(null, i, j, loadItem.tileMargin);
       }
     }
     

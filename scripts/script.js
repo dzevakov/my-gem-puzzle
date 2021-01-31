@@ -3,7 +3,7 @@ import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
 import {canvasElement, start, gameMenu, pauseMenu, resume,
   pause, save, loadGame, settings, scores, settingsContainer,
-  mainMenuContainer} from "./init.js";
+  mainMenuContainer, back, pictureSettings} from "./init.js";
 import {State} from "./state.js";
 
 export const ctx = canvasElement.getContext('2d');
@@ -15,14 +15,15 @@ ctx.textBaseline = 'middle';
 //state init
 export let state = new State();
 state.gameBoard = new Board();
-export let tileRectungleWidth;
+export let tileWidth;
+export const imageObj = new Image(400, 400);
 
 function stateLoad() {
   state.timer = new Timer();
   state.moveCounter = new MoveCounter();
   state.gameBoard = new Board();
   state.gameBoard.init();
-  state.score = [];
+  state.score = [];  
   if(localStorage.getItem('state')) {
     state.load();
   }
@@ -30,13 +31,11 @@ function stateLoad() {
 
 stateLoad();
 
-
-
 //new game start
-function startGame() {  
-  state.gameBoard.init();
-  tileRectungleWidth = canvasElement.width / state.gameBoard.boardSize;
-  state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
+function startGame(tileType) {  
+  state.gameBoard.init(tileType);
+  tileWidth = canvasElement.width / state.gameBoard.boardSize;
+  state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
   gameMenu.style.display = 'none';
   pauseMenu.style.display = 'none';
   state.moveCounter.reset();
@@ -51,6 +50,7 @@ start.addEventListener('click', e => {
 
 pause.addEventListener('click', e => {
   settingsContainer.style.display = 'none';
+  back.style.display = 'none';
   gameMenu.style.display = 'flex';
   mainMenuContainer.style.display = 'flex';
   pauseMenu.style.display = 'flex';
@@ -70,7 +70,7 @@ save.addEventListener('click', e => {
 loadGame.addEventListener('click', e => {
   if(localStorage.getItem('state')) {
     state.load();
-    state.gameBoard.renderBoard(ctx, tileRectungleWidth, canvasElement.width);
+    state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
     gameMenu.style.display = 'none';
     pauseMenu.style.display = 'none';
     state.timer.setTimer();
@@ -82,13 +82,40 @@ settings.addEventListener('click', e => {
   mainMenuContainer.style.display = 'none';
 
   settingsContainer.style.display = 'flex';
+  back.style.display = 'block';
 });
 
 const boardSizeSettings = document.querySelectorAll('.boardSize-settings');
-boardSizeSettings.forEach(function (element, index) {
+function settingsListner(element, index) {
   element.addEventListener('click', e => {
     state.gameBoard.boardSize = index + 3;
+    state.tileMargin = 10;
     startGame();
   });
+}
+
+for(let index = 0; index < boardSizeSettings.length - 1; index++) {
+  settingsListner(boardSizeSettings[index], index);
+}
+
+pictureSettings.addEventListener('click', e => {
+  state.gameBoard.boardSize = 4;
+  imageObj.onload = function() {
+    startGame(true);
+  };
+  imageObj.src = '../img/base/32.jpg';
 });
 
+back.addEventListener('click', e => {
+  settingsContainer.style.display = 'none';
+  back.style.display = 'none';
+  mainMenuContainer.style.display = 'flex';
+  pauseMenu.style.display = 'flex';  
+});
+
+scores.addEventListener('click', e => {
+  pauseMenu.style.display = 'none';
+  mainMenuContainer.style.display = 'none';
+  scores.style.display = 'block';
+  back.style.display = 'block';
+});
