@@ -103,7 +103,8 @@ pictureSettings.addEventListener('click', e => {
   imageObj.onload = function() {
     startGame(true);
   };
-  imageObj.src = '../img/base/32.jpg';
+  const imgName = Math.floor(Math.random() * 150);
+  imageObj.src = `../img/base/${imgName}.jpg`;
 });
 
 back.addEventListener('click', e => {
