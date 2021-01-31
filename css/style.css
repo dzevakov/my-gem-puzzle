@@ -34,24 +34,41 @@ body {
   justify-content: space-between;
   width: 100%;
   margin-top: 150px;
-  margin-bottom: 45px;
+  margin-bottom: 30px;
 }
 
 .status-item {
+  align-self: center;
   font-family: 'Shojumaru';
   font-weight: normal;
   font-size: 14px;
   color: #fff;
 }
 
-.pause {
+.status-item-button {
   background: none;
   border: none;
 }
 
-.pause:hover, .pause:focus {
+.status-item-button:hover, .status-item-button:focus {
   transition: .25s;
   transform: scale(1.4);
+}
+
+.sound-toggleOn {
+  content: '';
+  width: 10%;
+  height: 32px;
+  background: url(../img/sound-on.svg) center no-repeat;
+  background-size: contain;
+}
+
+.sound-toggleOff {
+  content: '';
+  width: 10%;
+  height: 32px;
+  background: url(../img/sound-off.svg) center no-repeat;
+  background-size: contain;
 }
 
 .container {

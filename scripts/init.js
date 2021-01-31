@@ -2,11 +2,11 @@ const body = document.querySelector('body');
 
 // status bar start
 const statusBar = document.createElement('section');
-statusBar.className = 'status-bar status-item ';
+statusBar.className = 'status-bar status-item';
 body.append(statusBar);
 
 const timer = document.createElement('div');
-timer.className = 'timer';
+timer.className = 'timer status-item';
 statusBar.append(timer);
 
 const timerBlock = document.createElement('div');
@@ -27,7 +27,7 @@ timeSeconds.innerHTML = '00';
 timerBlock.append(timeSeconds);
 
 const movesBlock = document.createElement('div');
-movesBlock.className = 'moves-block';
+movesBlock.className = 'moves-block status-item';
 movesBlock.innerText = 'Moves : ';
 statusBar.append(movesBlock);
 
@@ -37,16 +37,23 @@ movesAmount.innerText = '0';
 movesBlock.append(movesAmount);
 
 export const pause = document.createElement('input');
-pause.className = 'pause status-item ';
+pause.className = 'status-item-button status-item';
 pause.type = 'button';
 pause.value = 'Pause';
 statusBar.append(pause);
 //status bar end
 
+// sound toggle start
+export const soundToggle = document.createElement('input');
+soundToggle.className = 'sound-toggleOff status-item-button';
+soundToggle.type = 'button';
+statusBar.append(soundToggle);
+// sound toggle end
+
 //game feild start
 const container = document.createElement('div');
 container.className = 'container';
-statusBar.after(container);
+body.append(container);
 
 export const canvasElement = document.createElement('canvas');
 canvasElement.className = 'game-field';

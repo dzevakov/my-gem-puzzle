@@ -1,5 +1,13 @@
 import {ctx, state, tileWidth} from "./script.js";
-import {canvasElement} from "./init.js";
+import {canvasElement, soundToggle} from "./init.js";
+
+let sound = new Audio('../sounds/sound.mp3');
+function audioPlay() {
+  sound.oncanplaythrough = function() {
+    sound.currentTime = 0;
+    sound.play();
+  };
+}
 
 let targetTile = {
   X : undefined,
@@ -89,6 +97,17 @@ canvasElement.addEventListener('mouseup', e => {
     targetTile.Y = draggable.Y;
   }
 
+  sound.oncanplaythrough = function() {
+    sound.play();
+  };
+  function audioPlay() {
+    if(soundToggle.classList.contains('sound-toggleOn')) {
+      sound.pause();
+      sound.currentTime = 0;
+      sound.play();
+    }
+  }
+
   const tempTile = state.gameBoard.boardGrid[draggable.Y][draggable.X];
   tempTile.caption = draggable.caption;
   if(wasMoving) {
@@ -100,12 +119,15 @@ canvasElement.addEventListener('mouseup', e => {
       state.gameBoard.boardGrid[targetTile.Y][targetTile.X] = tempTile;
       state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
       state.moveCounter.countMoves();
+      audioPlay();
     } else {
       state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+      audioPlay();
     }
   } else {
     if(targetTile.X !== undefined && targetTile.Y !== undefined) {
       reRenderTile(targetTile.X, targetTile.Y);
+      audioPlay();
     }
   }
   

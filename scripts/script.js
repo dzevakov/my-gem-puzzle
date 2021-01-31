@@ -3,7 +3,7 @@ import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
 import {canvasElement, start, gameMenu, pauseMenu, resume,
   pause, save, loadGame, settings, scores, settingsContainer,
-  mainMenuContainer, back, pictureSettings} from "./init.js";
+  mainMenuContainer, back, pictureSettings, soundToggle} from "./init.js";
 import {State} from "./state.js";
 
 export const ctx = canvasElement.getContext('2d');
@@ -119,4 +119,19 @@ scores.addEventListener('click', e => {
   mainMenuContainer.style.display = 'none';
   scores.style.display = 'block';
   back.style.display = 'block';
+});
+
+// sound toggle
+function toggle(el) {
+  if(el.classList.contains('sound-toggleOff')) {
+    el.classList.remove('sound-toggleOff');
+    el.classList.add('sound-toggleOn');
+  } else {
+    el.classList.remove('sound-toggleOn');
+    el.classList.add('sound-toggleOff');
+  }  
+}
+
+soundToggle.addEventListener('click', e => {
+  toggle(soundToggle);
 });
