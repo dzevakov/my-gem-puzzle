@@ -1,13 +1,8 @@
-import {ctx, state, tileWidth} from "./script.js";
+import {ctx, state, tileWidth, imageObj, tileType} from "./script.js";
 import {canvasElement, soundToggle} from "./init.js";
+import {Tile} from "./tile.js";
 
 let sound = new Audio('../sounds/sound.mp3');
-function audioPlay() {
-  sound.oncanplaythrough = function() {
-    sound.currentTime = 0;
-    sound.play();
-  };
-}
 
 let targetTile = {
   X : undefined,
@@ -37,15 +32,24 @@ let draggable = {
 };
 
 function onMoveDraw(rectX, rectY) {
-  state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
-  ctx.fillStyle = 'rgb(113,161,255)';
-  ctx.fillRect((rectX + 5), (rectY + 5),
-    tileWidth - 10, tileWidth - 10);
-  ctx.strokeRect((rectX + 5), (rectY + 5),
-    tileWidth - 10, tileWidth - 10);
-  ctx.fillStyle = 'black';
-  ctx.fillText(draggable.caption, (rectX + (tileWidth / 2)),
-    (rectY + (tileWidth / 2)));
+  if(tileType) {
+    state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+    ctx.drawImage(imageObj, draggable.X * 225, draggable.Y * 225, 225, 225, rectX, rectY, tileWidth, tileWidth);
+    ctx.strokeRect((rectX), (rectY), tileWidth, tileWidth);
+    ctx.fillStyle = 'black';
+    ctx.fillText(draggable.caption, (rectX + (tileWidth / 2)),
+      (rectY + (tileWidth / 2)));
+  } else {
+    state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+    ctx.fillStyle = 'rgb(113,161,255)';
+    ctx.fillRect((rectX + 5), (rectY + 5),
+      tileWidth - 10, tileWidth - 10);
+    ctx.strokeRect((rectX + 5), (rectY + 5),
+      tileWidth - 10, tileWidth - 10);
+    ctx.fillStyle = 'black';
+    ctx.fillText(draggable.caption, (rectX + (tileWidth / 2)),
+      (rectY + (tileWidth / 2)));
+  }
 }
 
 canvasElement.addEventListener('mousedown', e => {
@@ -76,9 +80,9 @@ canvasElement.addEventListener('mousemove', e => {
 function reRenderTile(j, i) {
   const tempTile = state.gameBoard.boardGrid[i][j];
   state.gameBoard.boardGrid[i][j] = state.gameBoard.boardGrid[draggable.Y][draggable.X];
-  state.gameBoard.boardGrid[i][j].render(ctx, tileWidth, j, i);
   state.gameBoard.boardGrid[draggable.Y][draggable.X] = tempTile;
-  state.gameBoard.boardGrid[draggable.Y][draggable.X].render(ctx, tileWidth, draggable.X, draggable.Y);
+  state.gameBoard.boardGrid[i][j].renderAnimation(ctx, tileWidth, j, i);
+  state.gameBoard.boardGrid[draggable.Y][draggable.X].renderAnimation(ctx, tileWidth, draggable.X, draggable.Y);  
   state.moveCounter.countMoves();
 }
 
@@ -97,9 +101,13 @@ canvasElement.addEventListener('mouseup', e => {
     targetTile.Y = draggable.Y;
   }
 
-  sound.oncanplaythrough = function() {
+  sound.addEventListener('canplaythrough', e => {
+    e.preventDefault();
     sound.play();
-  };
+  });
+  sound.addEventListener('playingh', function(e) {
+    e.preventDefault();
+  });
   function audioPlay() {
     if(soundToggle.classList.contains('sound-toggleOn')) {
       sound.pause();
