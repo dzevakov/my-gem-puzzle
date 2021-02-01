@@ -17,6 +17,8 @@ export let state = new State();
 state.gameBoard = new Board();
 export let tileWidth;
 export const imageObj = new Image(400, 400);
+let imgName;
+export let tileType = false;
 
 function stateLoad() {
   state.timer = new Timer();
@@ -32,7 +34,7 @@ function stateLoad() {
 stateLoad();
 
 //new game start
-function startGame(tileType) {  
+function startGame(tileType) {
   state.gameBoard.init(tileType);
   tileWidth = canvasElement.width / state.gameBoard.boardSize;
   state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
@@ -44,7 +46,15 @@ function startGame(tileType) {
 }
 
 start.addEventListener('click', e => {
-  startGame();
+  if(tileType) {
+    imageObj.onload = function() {
+      startGame(tileType);
+    };
+    imgName = Math.floor(Math.random() * 150);
+    imageObj.src = `../img/base/${imgName}.jpg`;
+  } else {
+    startGame(tileType);
+  }
 });
 //new game end
 
@@ -90,7 +100,8 @@ function settingsListner(element, index) {
   element.addEventListener('click', e => {
     state.gameBoard.boardSize = index + 3;
     state.tileMargin = 10;
-    startGame();
+    tileType = false;
+    startGame(tileType);
   });
 }
 
@@ -100,10 +111,11 @@ for(let index = 0; index < boardSizeSettings.length - 1; index++) {
 
 pictureSettings.addEventListener('click', e => {
   state.gameBoard.boardSize = 4;
+  tileType = true;
   imageObj.onload = function() {
-    startGame(true);
+    startGame(tileType);
   };
-  const imgName = Math.floor(Math.random() * 150);
+  imgName = Math.floor(Math.random() * 150);
   imageObj.src = `../img/base/${imgName}.jpg`;
 });
 
