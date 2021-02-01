@@ -1,4 +1,4 @@
-import {ctx, state, tileWidth, imageObj, tileType} from "./script.js";
+import {ctx, state, tileWidth, imageObj} from "./script.js";
 import {canvasElement, soundToggle} from "./init.js";
 import {Tile} from "./tile.js";
 
@@ -32,7 +32,7 @@ let draggable = {
 };
 
 function onMoveDraw(rectX, rectY) {
-  if(tileType) {
+  if(state.tileType) {
     state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
     ctx.drawImage(imageObj, draggable.X * 225, draggable.Y * 225, 225, 225, rectX, rectY, tileWidth, tileWidth);
     ctx.strokeRect((rectX), (rectY), tileWidth, tileWidth);

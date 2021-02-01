@@ -17,15 +17,17 @@ export let state = new State();
 state.gameBoard = new Board();
 export let tileWidth;
 export const imageObj = new Image(400, 400);
-let imgName;
-export let tileType = false;
+// let imgName;
+// export let tileType = false;
 
 function stateLoad() {
   state.timer = new Timer();
   state.moveCounter = new MoveCounter();
   state.gameBoard = new Board();
   state.gameBoard.init();
-  state.score = [];  
+  state.score = [];
+  state.tileType = false;
+  state.imgName = 1;
   if(localStorage.getItem('state')) {
     state.load();
   }
@@ -46,14 +48,14 @@ function startGame(tileType) {
 }
 
 start.addEventListener('click', e => {
-  if(tileType) {
+  if(state.tileType) {
     imageObj.onload = function() {
-      startGame(tileType);
+      startGame(state.tileType);
     };
-    imgName = Math.floor(Math.random() * 150);
-    imageObj.src = `../img/base/${imgName}.jpg`;
+    state.imgName = Math.floor(Math.random() * 150);
+    imageObj.src = `../img/base/${state.imgName}.jpg`;
   } else {
-    startGame(tileType);
+    startGame(state.tileType);
   }
 });
 //new game end
@@ -80,10 +82,18 @@ save.addEventListener('click', e => {
 loadGame.addEventListener('click', e => {
   if(localStorage.getItem('state')) {
     state.load();
-    state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
-    gameMenu.style.display = 'none';
-    pauseMenu.style.display = 'none';
-    state.timer.setTimer();
+    tileWidth = canvasElement.width / state.gameBoard.boardSize;
+    imageObj.onload = function() {
+      state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+      gameMenu.style.display = 'none';
+      pauseMenu.style.display = 'none';
+      state.timer.setTimer();
+    };
+    imageObj.src = `../img/base/${state.imgName}.jpg`;
+    // state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+    // gameMenu.style.display = 'none';
+    // pauseMenu.style.display = 'none';
+    // state.timer.setTimer();
   }
 });
 
@@ -100,8 +110,8 @@ function settingsListner(element, index) {
   element.addEventListener('click', e => {
     state.gameBoard.boardSize = index + 3;
     state.tileMargin = 10;
-    tileType = false;
-    startGame(tileType);
+    state.tileType = false;
+    startGame(state.tileType);
   });
 }
 
@@ -111,12 +121,12 @@ for(let index = 0; index < boardSizeSettings.length - 1; index++) {
 
 pictureSettings.addEventListener('click', e => {
   state.gameBoard.boardSize = 4;
-  tileType = true;
+  state.tileType = true;
   imageObj.onload = function() {
-    startGame(tileType);
+    startGame(state.tileType);
   };
-  imgName = Math.floor(Math.random() * 150);
-  imageObj.src = `../img/base/${imgName}.jpg`;
+  state.imgName = Math.floor(Math.random() * 150);
+  imageObj.src = `../img/base/${state.imgName}.jpg`;
 });
 
 back.addEventListener('click', e => {
