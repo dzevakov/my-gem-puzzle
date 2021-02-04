@@ -3,7 +3,8 @@ import {MoveCounter} from "./move-counter.js";
 import {Timer} from "./timer.js";
 import {canvasElement, start, gameMenu, pauseMenu, resume,
   pause, save, loadGame, settings, scores, settingsContainer,
-  mainMenuContainer, back, pictureSettings, soundToggle} from "./init.js";
+  mainMenuContainer, back, pictureSettings, soundToggle,
+  scoreTable} from "./init.js";
 import {State} from "./state.js";
 
 export const ctx = canvasElement.getContext('2d');
@@ -17,6 +18,11 @@ export let state = new State();
 state.gameBoard = new Board();
 export let tileWidth;
 export const imageObj = new Image(400, 400);
+export let score = [];
+// if(!localStorage.score) {
+//   score = [{time:0, moves:0, size:0}];
+//   localStorage.setItem("score", JSON.stringify(score));
+// }
 // let imgName;
 // export let tileType = false;
 
@@ -25,7 +31,6 @@ function stateLoad() {
   state.moveCounter = new MoveCounter();
   state.gameBoard = new Board();
   state.gameBoard.init();
-  state.score = [];
   state.tileType = false;
   state.imgName = 1;
   if(localStorage.getItem('state')) {
@@ -62,7 +67,9 @@ start.addEventListener('click', e => {
 
 pause.addEventListener('click', e => {
   settingsContainer.style.display = 'none';
+  scoreTable.style.display = 'none';
   back.style.display = 'none';
+  scoreTable.innerHTML = '';
   gameMenu.style.display = 'flex';
   mainMenuContainer.style.display = 'flex';
   pauseMenu.style.display = 'flex';
@@ -90,10 +97,6 @@ loadGame.addEventListener('click', e => {
       state.timer.setTimer();
     };
     imageObj.src = `../img/base/${state.imgName}.jpg`;
-    // state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
-    // gameMenu.style.display = 'none';
-    // pauseMenu.style.display = 'none';
-    // state.timer.setTimer();
   }
 });
 
@@ -131,16 +134,67 @@ pictureSettings.addEventListener('click', e => {
 
 back.addEventListener('click', e => {
   settingsContainer.style.display = 'none';
+  scoreTable.style.display = 'none';
   back.style.display = 'none';
+  scoreTable.innerHTML = '';
   mainMenuContainer.style.display = 'flex';
   pauseMenu.style.display = 'flex';  
 });
 
+//score
+function renderScore(scoreInfo) {
+  let scoreItem;
+  scoreItem = document.createElement('h3');
+    scoreItem.className = 'score-item';
+    scoreItem.innerHTML = 'Position';
+    scoreTable.append(scoreItem);
+
+    scoreItem = document.createElement('h3');
+    scoreItem.className = 'score-item';
+    scoreItem.innerHTML = 'Time';
+    scoreTable.append(scoreItem);
+
+    scoreItem = document.createElement('h3');
+    scoreItem.className = 'score-item';
+    scoreItem.innerHTML = 'Moves';
+    scoreTable.append(scoreItem);
+
+    scoreItem = document.createElement('h3');
+    scoreItem.className = 'score-item';
+    scoreItem.innerHTML = 'Size';
+    scoreTable.append(scoreItem);
+  if(localStorage.score) {
+    for(let i = 1; i <= scoreInfo.length; i++) {
+      scoreItem = document.createElement('h3');
+      scoreItem.className = 'score-item';
+      scoreItem.innerHTML = i;
+      scoreTable.append(scoreItem);
+
+      scoreItem = document.createElement('h3');
+      scoreItem.className = 'score-item';
+      scoreItem.innerHTML = `${Math.floor(scoreInfo[i - 1].time / 60)}:${Math.floor(scoreInfo[i - 1].time % 60)}`;
+      scoreTable.append(scoreItem);
+
+      scoreItem = document.createElement('h3');
+      scoreItem.className = 'score-item';
+      scoreItem.innerHTML = scoreInfo[i - 1].moves;
+      scoreTable.append(scoreItem);
+
+      scoreItem = document.createElement('h3');
+      scoreItem.className = 'score-item';
+      scoreItem.innerHTML = scoreInfo[i - 1].size;
+      scoreTable.append(scoreItem);
+    }
+  }
+}
+
 scores.addEventListener('click', e => {
   pauseMenu.style.display = 'none';
   mainMenuContainer.style.display = 'none';
-  scores.style.display = 'block';
+  scoreTable.style.display = 'grid';
   back.style.display = 'block';
+  score = JSON.parse(localStorage.getItem("score"));
+  renderScore(score);
 });
 
 // sound toggle

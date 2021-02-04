@@ -161,6 +161,11 @@ pictureSettings.className = 'boardSize-settings menu-button';
 pictureSettings.type = 'button';
 pictureSettings.value = 'Picture';
 settingsContainer.append(pictureSettings);
+// setting of BoardSize end
+
+export const scoreTable = document.createElement('div');
+scoreTable.className = 'score-table';
+gameMenu.append(scoreTable);
 
 export const back = document.createElement('input');
 back.className = 'back menu-button';

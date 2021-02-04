@@ -125,8 +125,24 @@ body {
 
 .back {
   display: none;
+  margin-top: auto;
 }
 
 .moves-block, .timer {
   width: 33.3%;
+}
+
+.score-table {
+  display: grid;
+  margin-top: 5%;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 5px;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.score-item {
+  margin-left: auto;
+  margin-right: auto;
 }

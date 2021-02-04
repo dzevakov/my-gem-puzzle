@@ -1,6 +1,6 @@
 import {ctx, state, tileWidth, imageObj} from "./script.js";
 import {canvasElement, soundToggle} from "./init.js";
-import {Tile} from "./tile.js";
+import {addScore} from "./score.js";
 
 let sound = new Audio('../sounds/sound.mp3');
 
@@ -151,7 +151,7 @@ canvasElement.addEventListener('mouseup', e => {
   }
 });
   
-  // end of game start
+// end of the game start
 function checkGame(boardGrid, boardSize) {
   let checkNumbers = Array.from(Array(boardSize * boardSize).keys());
   checkNumbers.push(checkNumbers.shift());
@@ -164,7 +164,8 @@ function checkGame(boardGrid, boardSize) {
       }
     }
   }
+  addScore();
   return true;
 }
-// end of game start
+// end of the game end
    
