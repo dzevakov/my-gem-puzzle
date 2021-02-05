@@ -53,6 +53,7 @@ function onMoveDraw(rectX, rectY) {
 }
 
 canvasElement.addEventListener('mousedown', e => {
+  e.preventDefault();
   draggable.X = Math.floor(e.offsetX / tileWidth);
   draggable.Y = Math.floor(e.offsetY / tileWidth);
   mouseDownXY.X = e.offsetX;
@@ -65,6 +66,7 @@ canvasElement.addEventListener('mousedown', e => {
 });
 
 canvasElement.addEventListener('mousemove', e => {
+  e.preventDefault();
   if(Math.abs(mouseDownXY.X - e.offsetX) > 10 || Math.abs(mouseDownXY.Y - e.offsetY) > 10) {
     if(isDeleting === true) {
       state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = 0;
@@ -86,7 +88,40 @@ function reRenderTile(j, i) {
   state.moveCounter.countMoves();
 }
 
+function clearDate() {
+  isMoving = false;
+  wasMoving = false;
+  isDeleting = false;
+  targetTile.clear();
+  mouseDownXY.clear();
+}
+
+document.addEventListener('mouseup', e => {
+  e.preventDefault();
+  if(wasMoving && e.target.tagName != 'Canvas') {
+    state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = draggable.caption;
+    state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+
+    audioPlay();
+    clearDate();
+  }
+});
+
+function audioPlay() {
+  if(soundToggle.classList.contains('sound-toggleOn')) {
+    sound.addEventListener('canplaythrough', e => {
+      e.preventDefault();
+      sound.play();
+    });
+
+    sound.pause();
+    sound.currentTime = 0;
+    sound.play();
+  }
+}
+
 canvasElement.addEventListener('mouseup', e => {
+  e.preventDefault();
   if((draggable.Y > 0) && (state.gameBoard.boardGrid[draggable.Y - 1][draggable.X].caption === 0)) {
     targetTile.X = draggable.X;
     targetTile.Y = draggable.Y - 1;
@@ -99,21 +134,6 @@ canvasElement.addEventListener('mouseup', e => {
   } else if((draggable.X < state.gameBoard.boardSize - 1) && (state.gameBoard.boardGrid[draggable.Y][draggable.X + 1].caption === 0)) {
     targetTile.X = draggable.X + 1;
     targetTile.Y = draggable.Y;
-  }
-
-  sound.addEventListener('canplaythrough', e => {
-    e.preventDefault();
-    sound.play();
-  });
-  sound.addEventListener('playingh', function(e) {
-    e.preventDefault();
-  });
-  function audioPlay() {
-    if(soundToggle.classList.contains('sound-toggleOn')) {
-      sound.pause();
-      sound.currentTime = 0;
-      sound.play();
-    }
   }
 
   const tempTile = state.gameBoard.boardGrid[draggable.Y][draggable.X];
@@ -129,6 +149,7 @@ canvasElement.addEventListener('mouseup', e => {
       state.moveCounter.countMoves();
       audioPlay();
     } else {
+      state.gameBoard.boardGrid[draggable.Y][draggable.X].caption = draggable.caption;
       state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
       audioPlay();
     }
@@ -139,11 +160,7 @@ canvasElement.addEventListener('mouseup', e => {
     }
   }
   
-  isMoving = false;
-  wasMoving = false;
-  isDeleting = false;
-  targetTile.clear();
-  mouseDownXY.clear();
+  clearDate();
 
   if(checkGame(state.gameBoard.boardGrid, state.gameBoard.boardSize)) {
     state.timer.pause();
