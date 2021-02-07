@@ -1,9 +1,14 @@
 const body = document.querySelector('body');
 
+// container
+const container = document.createElement('div');
+container.className = 'container';
+body.append(container);
+
 // status bar start
 const statusBar = document.createElement('section');
 statusBar.className = 'status-bar status-item';
-body.append(statusBar);
+container.append(statusBar);
 
 const timer = document.createElement('div');
 timer.className = 'timer status-item';
@@ -51,21 +56,21 @@ statusBar.append(soundToggle);
 // sound toggle end
 
 //game feild start
-const container = document.createElement('div');
-container.className = 'container';
-body.append(container);
+const gameFieldContainer = document.createElement('div');
+gameFieldContainer.className = 'game-field-container';
+container.append(gameFieldContainer);
 
 export const canvasElement = document.createElement('canvas');
 canvasElement.className = 'game-field';
 canvasElement.width = '400';
 canvasElement.height = '400';
-container.append(canvasElement);
+gameFieldContainer.append(canvasElement);
 //game feild end
 
 //game menu start
 export const gameMenu = document.createElement('div');
 gameMenu.className = 'game-menu menu-display';
-container.append(gameMenu);
+gameFieldContainer.append(gameMenu);
 
 // pause menu start
 export const pauseMenu = document.createElement('div');

@@ -7,6 +7,7 @@ export class Tile {
 
   renderAnimation(canvasContext, tileWidth, gridX, gridY) {
     let i = 0;
+    const tileMargin = Math.floor(tileWidth / 20);
 
     if(this.caption === 0) {
       canvasContext.clearRect((gridX * tileWidth), (gridY * tileWidth),
@@ -16,9 +17,9 @@ export class Tile {
         canvasContext.clearRect((gridX * tileWidth), (gridY * tileWidth),
           tileWidth, tileWidth);
         canvasContext.fillStyle = 'rgb(113,161,255)';
-        canvasContext.fillRect(((gridX * tileWidth) + (5 * (10 - i))), ((gridY * tileWidth) + (5 * (10 - i))),
+        canvasContext.fillRect(((gridX * tileWidth) + (tileMargin * (10 - i))), ((gridY * tileWidth) + (tileMargin * (10 - i))),
           tileWidth * i / 10, tileWidth * i / 10);
-        canvasContext.strokeRect(((gridX * tileWidth) + (5 * (10 - i))), ((gridY * tileWidth) + (5 * (10 - i))),
+        canvasContext.strokeRect(((gridX * tileWidth) + (tileMargin * (10 - i))), ((gridY * tileWidth) + (tileMargin * (10 - i))),
           tileWidth * i / 10, tileWidth * i / 10);
         canvasContext.fillStyle = 'black';
         canvasContext.fillText(this.caption,
@@ -33,14 +34,16 @@ export class Tile {
   }
 
   render(canvasContext, tileWidth, gridX, gridY) {
+    const tileMargin = Math.floor(tileWidth / 20);
+
     if(this.caption === 0) {
       canvasContext.clearRect((gridX * tileWidth), (gridY * tileWidth),
         tileWidth, tileWidth);
     } else {
       canvasContext.fillStyle = 'rgb(113,161,255)';
-      canvasContext.fillRect((gridX * tileWidth + 5), (gridY * tileWidth + 5),
+      canvasContext.fillRect((gridX * tileWidth + tileMargin), (gridY * tileWidth + tileMargin),
         tileWidth - 10, tileWidth - 10);
-      canvasContext.strokeRect((gridX * tileWidth + 5), (gridY * tileWidth + 5),
+      canvasContext.strokeRect((gridX * tileWidth + tileMargin), (gridY * tileWidth + tileMargin),
         tileWidth - 10, tileWidth - 10);
       canvasContext.fillStyle = 'black';
       canvasContext.fillText(this.caption,

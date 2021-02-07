@@ -8,10 +8,34 @@ import {canvasElement, start, gameMenu, pauseMenu, resume,
 import {State} from "./state.js";
 
 export const ctx = canvasElement.getContext('2d');
-ctx.strokeStyle = 'black';
-ctx.font = '36px sanserif';
-ctx.textAlign = 'center';
-ctx.textBaseline = 'middle';
+if(window.innerWidth < 400) {
+  resizeCanvas(300, 24);
+ } else if (window.innerWidth > 400) {
+  resizeCanvas(400, 36);
+ }
+
+// ctx.strokeStyle = 'black';
+// ctx.font = '36px sanserif';
+// ctx.textAlign = 'center';
+// ctx.textBaseline = 'middle';
+
+// resize canvas
+function resizeCanvas(newSize, newFont) {
+  ctx.canvas.width = newSize;
+  ctx.canvas.height = newSize;
+  ctx.strokeStyle = 'black';
+  ctx.font = `${newFont}px sanserif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+}
+ window.addEventListener('resize', e => {
+   if(window.innerWidth < 400) {
+    resizeCanvas(300, 24);
+   } else if (window.innerWidth > 400) {
+    resizeCanvas(400, 36);
+   }
+   state.gameBoard.renderBoard(ctx, tileWidth, canvasElement.width);
+ });
 
 //state init
 export let state = new State();
@@ -19,12 +43,6 @@ state.gameBoard = new Board();
 export let tileWidth;
 export const imageObj = new Image(400, 400);
 export let score = [];
-// if(!localStorage.score) {
-//   score = [{time:0, moves:0, size:0}];
-//   localStorage.setItem("score", JSON.stringify(score));
-// }
-// let imgName;
-// export let tileType = false;
 
 function stateLoad() {
   state.timer = new Timer();
